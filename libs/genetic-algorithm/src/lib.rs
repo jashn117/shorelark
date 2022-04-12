@@ -40,20 +40,34 @@ impl SelectionMethod for RoulleteWheelSelection {
     }
 }
 
-pub struct GeneticAlgorithm;
+pub struct GeneticAlgorithm<S> {
+    selection_method: S,
+}
 
-impl GeneticAlgorithm {
-    pub fn new() -> Self {
-        Self
+impl<S> GeneticAlgorithm<S>
+where
+    S: SelectionMethod
+{
+    pub fn new(selection_method: S) -> Self {
+        Self { selection_method }
     }
 
-    pub fn iterate<I>(&self, population: &[I]) -> Vec<I>
+    pub fn iterate<I>(
+        &self,
+        rng: &mut dyn RngCore,
+        population: &[I]) -> Vec<I>
     where
         I: Individual,
     {
         (0..population.len())
             .map(|_| {
-                //TODO: parent selection
+                // parent selection
+                let parent_a = self
+                    .selection_method
+                    .select(rng, population);
+                let parent_b = self
+                    .selection_method
+                    .select(rng, population);
                 //TODO: crossover/mix "traits"
                 //TODO: mutation
                 todo!()
@@ -106,11 +120,11 @@ mod tests {
                 TestIndividual::new(5.0)
             ];
 
-            let actual_histogram: BTreeMap<i32, _> = (0..1000)
+            let actual_histogram = (0..1000)
                 .map(|_| method.select(&mut rng, &population))
-                .fold(Default::default(), |mut histogram, individual| {
+                .fold(BTreeMap::default(), |mut histogram, individual| {
                     *histogram
-                        .entry(individual.fitness() as _)
+                        .entry(individual.fitness() as i32)
                         .or_default() += 1;
 
                     histogram
