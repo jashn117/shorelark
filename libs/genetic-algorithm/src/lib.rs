@@ -34,23 +34,6 @@ impl SelectionMethod for RoulleteWheelSelection {
     {
         assert!(!population.is_empty());
 
-        // let total_fitness= population
-        //     .iter()
-        //     .map(|individual| individual.fitness())
-        //     .sum::<f32>();
-
-        // loop {
-        //     let individual = population
-        //         .choose(rng)
-        //         .expect("got an empty population");
-
-        //     let individual_share = individual
-        //         .fitness() / total_fitness;
-
-        //     if rng.gen_bool(individual_share as f64) {
-        //         return individual;
-        //     }
-        // }
         population
             .choose_weighted(rng, |individual| individual.fitness())
             .expect("population cannot be zero")
@@ -82,8 +65,10 @@ impl GeneticAlgorithm {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::collections::BTreeMap;
     use rand::SeedableRng;
     use rand_chacha::ChaCha8Rng;
+    use maplit::btreemap;
 
     //? Testing structs
     #[cfg(test)]
@@ -107,8 +92,6 @@ mod tests {
     }
 
     mod select {
-        use std::collections::BTreeMap;
-
         use super::*;
 
         #[test]
@@ -123,28 +106,23 @@ mod tests {
                 TestIndividual::new(5.0)
             ];
 
-            let mut actual_histogram = BTreeMap::new();
+            let actual_histogram: BTreeMap<i32, _> = (0..1000)
+                .map(|_| method.select(&mut rng, &population))
+                .fold(Default::default(), |mut histogram, individual| {
+                    *histogram
+                        .entry(individual.fitness() as _)
+                        .or_default() += 1;
 
-            // Generate the actual histogram
-            for _ in  0..1000 {
-                // Select fitness using the Roullete Wheel Selection Method
-                let fitness = method
-                    .select(&mut rng, &population)
-                    .fitness() as i32;
+                    histogram
+                });
 
-                // Increment the number of times this fitness
-                // was selected by selection method
-                *actual_histogram
-                    .entry(fitness)
-                    .or_insert(0) += 1;
-            }
-
-            let expected_histogram = BTreeMap::from_iter(vec![
-                (1, 96),
-                (2, 174),
-                (3, 285),
-                (5, 445)
-            ]);
+            let expected_histogram = btreemap!{
+                // fitness => times selected by selection method
+                1 => 96,
+                2 => 174,
+                3 => 285,
+                5 => 445
+            };
 
             assert_eq!(actual_histogram, expected_histogram);
         }
