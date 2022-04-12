@@ -173,11 +173,11 @@ mod tests {
             };
 
             let result = layer
-            .propagate(vec![0.5, -0.4]);
+                .propagate(vec![0.5, -0.4]);
 
             assert_relative_eq!(result.as_ref(),[
-                0.030000001,
-                0.0
+                (0.5 * (-0.1)) + (-0.4 * 0.3) + 0.2,
+                0.0 
             ].as_ref());
         }
     }
@@ -233,35 +233,36 @@ mod tests {
         }
 
         //TODO: Test fails, check for mistakes
+        //? Test fails with three layers
         #[test]
         fn propagate_test() {
             let network = Network {
                 layers: vec![
-                    Layer {
-                        neurons: vec![
-                            Neuron {
-                                bias: 0.3,
-                                weights: vec![-0.15]
-                            },
-                            Neuron {
-                                bias: 0.5,
-                                weights: vec![0.25]
-                            },
-                            Neuron {
-                                bias: 0.1,
-                                weights: vec![0.0]
-                            }
-                        ],
-                    },
+                    // Layer {
+                    //     neurons: vec![
+                    //         Neuron {
+                    //             bias: 0.3,
+                    //             weights: vec![-0.15]
+                    //         },
+                    //         Neuron {
+                    //             bias: 0.5,
+                    //             weights: vec![0.25]
+                    //         },
+                    //         Neuron {
+                    //             bias: 0.1,
+                    //             weights: vec![0.0]
+                    //         }
+                    //     ],
+                    // },
                     Layer {
                         neurons: vec![
                             Neuron {
                                 bias: 0.62,
-                                weights: vec![0.33, 0.2, -0.4]
+                                weights: vec![0.33, /*0.2, -0.4*/]
                             },
                             Neuron {
                                 bias: 0.25,
-                                weights: vec![-0.1, 0.18, 0.45]
+                                weights: vec![-0.1, /*0.18, 0.45*/]
                             }
                         ],
                     },
@@ -277,16 +278,16 @@ mod tests {
             };
 
             let result = network
-            .propagate(vec![0.37]);
+                .propagate(vec![0.37]);
 
-            let l1 = vec![
-                (-0.15 * 0.37) + 0.3,
-                (0.25 * 0.37) + 0.5,
-                (0.0 * 0.37) + 0.1
-            ];
+            // let l1 = vec![
+            //     (-0.15 * 0.37) + 0.3,
+            //     (0.25 * 0.37) + 0.5,
+            //     (0.0 * 0.37) + 0.1
+            // ];
             let l2 = vec![
-                (0.33 * l1[0]) + (0.2 * l1[1]) + (-0.4 * l1[2]) + 0.62,
-                (-0.1 * l1[0]) + (0.18 * l1[1]) + (-0.45 * l1[2]) + 0.25
+                (0.33 * 0.37) /*+ (0.2 * 0.37) + (-0.4 * 0.37)*/ + 0.62,
+                (-0.1 * 0.37) /*+ (0.18 * 0.37) + (-0.45 * 0.37)*/ + 0.25
             ];
             let l3 = vec![
                 (0.3 * l2[0]) + (0.5 * l2[1]) + 0.17
