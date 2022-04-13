@@ -6,6 +6,7 @@ pub trait Individual {
     fn from_chromosome(chromosome: Chromosome) -> Self;
 }
 
+#[derive(Debug, Clone)]
 pub struct Chromosome {
     pub genes: Vec<f32>,
 }
