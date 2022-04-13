@@ -2,7 +2,8 @@ use std::ops::Index;
 
 pub trait Individual {
     fn fitness(&self) -> f32;
-    fn chromosome(&self) -> &Chromosome;
+    fn as_chromosome(&self) -> &Chromosome;
+    fn from_chromosome(chromosome: Chromosome) -> Self;
 }
 
 pub struct Chromosome {

@@ -65,7 +65,12 @@ mod tests {
         fn fitness(&self) -> f32 {
             self.fitness
         }
-        fn chromosome(&self) -> &Chromosome {
+
+        fn as_chromosome(&self) -> &Chromosome {
+            panic!("Not implemented for TestIndividual")
+        }
+
+        fn from_chromosome(_chromosome: Chromosome) -> Self {
             panic!("Not implemented for TestIndividual")
         }
     }
