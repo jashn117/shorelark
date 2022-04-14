@@ -25,6 +25,10 @@ impl Simulation {
         JsValue::from_serde(&world)
             .unwrap()
     }
+
+    pub fn step(&mut self) {
+        self.sim.step();
+    }
 }
 
 #[derive(Clone, Debug, Serialize)]

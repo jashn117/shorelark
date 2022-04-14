@@ -3,7 +3,6 @@ import * as sim from 'lib-simulation-wasm';
 // create a new simulation
 const simulation = new sim.Simulation();
 // generate and world and randomly populate it with animals and food
-const world = simulation.world();
 
 // HTML Canvas setup
 const canvas = document
@@ -61,23 +60,31 @@ CanvasRenderingContext2D.prototype.fillCircle = function (x, y, radius) {
 
 context.fillStyle = 'rgb(0, 0, 0)';
 
-// Render the animals
-for (const animal of world.animals) {
-  context
-    .fillTriangle(
-      animal.x * viewportWidth,
-      animal.y * viewportHeight,
-      animal.rotation,
-      0.02 * viewportWidth
-    );
+const main = () => {
+  context.clearRect(0, 0, viewportWidth * 1.1, viewportHeight * 1.1);
+  simulation.step();
+  const world = simulation.world();
+    // Render the animals
+  for (const animal of world.animals) {
+    context
+      .fillTriangle(
+        animal.x * viewportWidth,
+        animal.y * viewportHeight,
+        animal.rotation,
+        0.02 * viewportWidth
+      );
+  }
+  // Render the food
+  for (const food of world.food) {
+    context
+      .fillCircle(
+        food.x * viewportWidth,
+        food.y * viewportHeight,
+        0.005 * viewportWidth
+      )
+  }
+  window
+    .requestAnimationFrame(main);
 }
 
-// Render the food
-for (const food of world.food) {
-  context
-    .fillCircle(
-      food.x * viewportWidth,
-      food.y * viewportHeight,
-      0.005 * viewportWidth
-    )
-}
+main();

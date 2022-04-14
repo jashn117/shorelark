@@ -2,7 +2,7 @@ use nalgebra as na;
 use rand::{Rng, RngCore};
 
 pub struct Animal {
-    position: na::Point2<f32>,
+    pub position: na::Point2<f32>,
     rotation: na::Rotation2<f32>,
     speed: f32
 }
@@ -11,8 +11,8 @@ impl Animal {
     pub fn random(rng: &mut dyn RngCore) -> Self {
         Self {
             position: rng.gen(), // na::Point2::new(rng.gen(), rng.gen())
-            rotation: na::Rotation2::new(rng.gen()),
-            speed: rng.gen()
+            rotation: rng.gen(), // na::Rotation2::new(rng.gen())
+            speed: 0.002
         }
     }
 
@@ -46,7 +46,7 @@ impl Food {
 }
 
 pub struct World {
-    animals: Vec<Animal>,
+    pub animals: Vec<Animal>,
     food: Vec<Food>
 }
 
