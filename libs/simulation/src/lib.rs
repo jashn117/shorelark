@@ -1,4 +1,4 @@
-use rand::RngCore;
+use rand::{Rng, RngCore};
 use nalgebra as na;
 
 pub mod world;
@@ -18,7 +18,12 @@ impl Simulation {
         &self.world
     }
 
-    pub fn step(&mut self) {
+    pub fn step(&mut self, rng: &mut dyn RngCore) {
+        self.process_movement();
+        self.handle_collision(rng)
+    }
+
+    fn process_movement(&mut self) {
         for animal in &mut self.world.animals {
             animal.position += animal.rotation() * na::Vector2::new(animal.speed(), 0.0);
 
@@ -26,13 +31,19 @@ impl Simulation {
             animal.position.x = na::wrap(animal.position.x, 0.0, 1.0);
         }
     }
-}
 
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        let result = 2 + 2;
-        assert_eq!(result, 4);
+    fn handle_collision(&mut self, rng: &mut dyn RngCore) {
+        for animal in &mut self.world.animals {
+            for food in &mut self.world.food {
+                let dist = na::distance(
+                    &animal.position(),
+                    &food.position()
+                );
+
+                if dist < 0.015 {
+                    food.position = rng.gen()
+                }
+            }
+        }
     }
 }

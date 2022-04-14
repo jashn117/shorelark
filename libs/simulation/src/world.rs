@@ -30,7 +30,7 @@ impl Animal {
 }
 
 pub struct Food {
-    position: na::Point2<f32>
+    pub position: na::Point2<f32>
 }
 
 impl Food {
@@ -47,7 +47,7 @@ impl Food {
 
 pub struct World {
     pub animals: Vec<Animal>,
-    food: Vec<Food>
+    pub food: Vec<Food>
 }
 
 impl World {

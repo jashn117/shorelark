@@ -46,7 +46,7 @@ CanvasRenderingContext2D.prototype.fillTriangle = function (x, y, rotation, side
     y + Math.sin(rotation) * side * 1.5
   );
 
-  this.fillStyle = 'rgb(0, 0, 0)';
+  this.fillStyle = 'rgb(232, 106, 146)';
   this.fill();
 }
 
@@ -54,7 +54,7 @@ CanvasRenderingContext2D.prototype.fillCircle = function (x, y, radius) {
   this.beginPath();
   this.arc(x, y, radius, 0, 2 * Math.PI, false);
 
-  this.fillStyle = 'rgb(0, 0, 0)';
+  this.fillStyle = 'rgb(247, 231, 51)';
   this.fill();
 }
 
@@ -62,18 +62,10 @@ context.fillStyle = 'rgb(0, 0, 0)';
 
 const main = () => {
   context.clearRect(0, 0, viewportWidth * 1.1, viewportHeight * 1.1);
+
   simulation.step();
   const world = simulation.world();
-    // Render the animals
-  for (const animal of world.animals) {
-    context
-      .fillTriangle(
-        animal.x * viewportWidth,
-        animal.y * viewportHeight,
-        animal.rotation,
-        0.02 * viewportWidth
-      );
-  }
+
   // Render the food
   for (const food of world.food) {
     context
@@ -83,6 +75,18 @@ const main = () => {
         0.005 * viewportWidth
       )
   }
+
+  // Render the animals
+  for (const animal of world.animals) {
+    context
+      .fillTriangle(
+        animal.x * viewportWidth,
+        animal.y * viewportHeight,
+        animal.rotation,
+        0.02 * viewportWidth
+      );
+  }
+
   window
     .requestAnimationFrame(main);
 }
