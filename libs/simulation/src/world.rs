@@ -2,9 +2,9 @@ use nalgebra as na;
 use rand::{Rng, RngCore};
 
 pub struct Animal {
-    pub position: na::Point2<f32>,
-    rotation: na::Rotation2<f32>,
-    speed: f32
+    pub(crate) position: na::Point2<f32>,
+    pub(crate) rotation: na::Rotation2<f32>,
+    pub(crate) speed: f32
 }
 
 impl Animal {
@@ -30,7 +30,7 @@ impl Animal {
 }
 
 pub struct Food {
-    pub position: na::Point2<f32>
+    pub(crate) position: na::Point2<f32>
 }
 
 impl Food {
@@ -46,8 +46,8 @@ impl Food {
 }
 
 pub struct World {
-    pub animals: Vec<Animal>,
-    pub food: Vec<Food>
+    pub(crate) animals: Vec<Animal>,
+    pub(crate) food: Vec<Food>
 }
 
 impl World {

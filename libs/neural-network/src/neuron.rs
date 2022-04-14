@@ -1,12 +1,12 @@
 use rand::Rng;
 
 pub struct Neuron {
-    pub bias: f32, // Neuron's bias
-    pub weights: Vec<f32>, // incoming synapse weights
+    pub(crate) bias: f32, // Neuron's bias
+    pub(crate) weights: Vec<f32>, // incoming synapse weights
 }
 
 impl Neuron {
-    pub fn randomize(output_size: usize, rng: &mut dyn rand::RngCore) -> Self {
+    pub(crate) fn randomize(output_size: usize, rng: &mut dyn rand::RngCore) -> Self {
         let bias = rng.gen_range(-1.0..=1.0);
 
         let weights = (0..output_size)
@@ -16,7 +16,7 @@ impl Neuron {
         Self { bias, weights }
     }
 
-    pub fn propagate(&self, inputs: &Vec<f32>) -> f32 {
+    pub(crate) fn propagate(&self, inputs: &Vec<f32>) -> f32 {
         // number of inputs to neuron == number of synapses(weights)
         assert_eq!(inputs.len(), self.weights.len());
 
@@ -32,7 +32,7 @@ impl Neuron {
 
 #[cfg(test)]
 mod tests {
-  use super::*;
+    use super::*;
     use rand::SeedableRng;
     use rand_chacha::ChaCha8Rng;
     use approx::assert_relative_eq;
