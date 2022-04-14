@@ -3,14 +3,16 @@ use rand::{Rng, RngCore};
 
 pub struct Animal {
     position: na::Point2<f32>,
-    velocity: na::Vector2<f32>
+    rotation: na::Rotation2<f32>,
+    speed: f32
 }
 
 impl Animal {
     pub fn random(rng: &mut dyn RngCore) -> Self {
         Self {
             position: rng.gen(), // na::Point2::new(rng.gen(), rng.gen())
-            velocity: rng.gen() // na::Vector2::new(rng.gen(), rng.gen())
+            rotation: na::Rotation2::new(rng.gen()),
+            speed: rng.gen()
         }
     }
 
@@ -18,8 +20,12 @@ impl Animal {
         self.position
     }
 
-    pub fn velocity(&self) -> na::Vector2<f32> {
-        self.velocity
+    pub fn rotation(&self) -> na::Rotation2<f32> {
+        self.rotation
+    }
+
+    pub fn speed(&self) -> f32 {
+        self.speed
     }
 }
 

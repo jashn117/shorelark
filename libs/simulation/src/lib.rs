@@ -1,6 +1,6 @@
 use rand::RngCore;
 
-mod world;
+pub mod world;
 
 pub struct Simulation {
     world: world::World,
