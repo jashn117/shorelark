@@ -16,6 +16,24 @@ impl Neuron {
         Self { bias, weights }
     }
 
+    pub fn from_weights(
+        output_neurons: usize,
+        weights: &mut dyn Iterator<Item = f32>
+    ) -> Self {
+        let bias = weights
+            .next()
+            .expect("not enought weights!");
+
+        let weights = (0..output_neurons)
+            .map(|_| weights.next().expect("not enough weights!"))
+            .collect();
+
+        Self {
+            bias,
+            weights
+        }
+    }
+
     pub(crate) fn propagate(&self, inputs: &Vec<f32>) -> f32 {
         // number of inputs to neuron == number of synapses(weights)
         assert_eq!(inputs.len(), self.weights.len());

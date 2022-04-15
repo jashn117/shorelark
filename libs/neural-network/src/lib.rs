@@ -24,6 +24,34 @@ impl Network {
         Self { layers }
     }
 
+    pub fn from_weights(
+        layers: &[LayerTopology],
+        weights: impl IntoIterator<Item = f32>
+    ) -> Self {
+        assert!(layers.len() > 1);
+
+        let mut weights = weights.into_iter();
+
+        let layers = layers
+            .windows(2)
+            .map(|layers| {
+                layer::Layer::from_weights(
+                    layers[0].neurons,
+                    layers[1].neurons,
+                    &mut weights
+                )
+            })
+            .collect();
+
+        if weights.next().is_some() {
+            panic!("too many weights!");
+        }
+
+        Self {
+            layers
+        }
+    }
+
     pub fn propagate(&self, inputs: Vec<f32>) -> Vec<f32> {
         self.layers
             .iter()
@@ -202,6 +230,37 @@ mod tests {
                 actual.as_slice(),
                 expected.as_slice()
             );
+        }
+    }
+
+    mod from_weights {
+        use super::*;
+
+        #[test]
+        fn test() {
+            let weights = vec![
+                0.1, 0.2, 0.3, 0.4,
+                0.5, 0.6, 0.7, 0.8
+            ];
+
+            let network = Network::from_weights(
+                &[
+                    LayerTopology {
+                        neurons: 3
+                    },
+                    LayerTopology {
+                        neurons: 2
+                    },
+                ],
+                weights.clone()
+            );
+            let actual: Vec<_> = network
+                .weights();
+
+            assert_relative_eq!(
+                actual.as_slice(),
+                weights.as_slice()
+            )
         }
     }
 }

@@ -16,7 +16,21 @@ impl Layer {
         
         Self { neurons }
     }
-    
+
+    pub fn from_weights(
+        input_size: usize,
+        output_size: usize,
+        weights: &mut dyn Iterator<Item = f32>
+    ) -> Self {
+        let neurons = (0..output_size)
+            .map(|_| neuron::Neuron::from_weights(input_size, weights))
+            .collect();
+
+        Self {
+            neurons
+        }
+    }
+
     pub(crate) fn propagate(&self, inputs: Vec<f32>) -> Vec<f32> {
         self.neurons
         .iter()
