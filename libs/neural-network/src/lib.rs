@@ -29,6 +29,17 @@ impl Network {
             .iter()
             .fold(inputs, |inputs, layer| layer.propagate(inputs))
     }
+
+    pub fn weights(&self) -> Vec<f32> {
+        use std::iter::once;
+
+        self.layers
+            .iter()
+            .flat_map(|layer| layer.neurons.iter())
+            .flat_map(|neuron| once(&neuron.bias).chain(&neuron.weights))
+            .cloned()
+            .collect()
+    }
 }
 
 #[cfg(test)]
@@ -150,6 +161,47 @@ mod tests {
             ];
 
             assert_relative_eq!(result.as_slice(), l3.as_ref());
+        }
+    }
+
+    mod weights {
+        use super::*;
+
+        #[test]
+        fn test() {
+            let network = Network {
+                layers: vec![
+                    layer::Layer {
+                        neurons: vec![
+                            neuron::Neuron {
+                                bias: 0.25,
+                                weights: vec![0.1, 0.5, 0.4]
+                            }
+                        ]
+                    },
+                    layer::Layer {
+                        neurons: vec![
+                            neuron::Neuron {
+                                bias: 0.3,
+                                weights: vec![0.2, 0.6, 0.1]
+                            }
+                        ]
+                    }
+                ]
+            };
+
+            let actual = network
+                .weights();
+
+            let expected = vec![
+                0.25, 0.1, 0.5, 0.4,
+                0.3, 0.2, 0.6, 0.1
+            ];
+
+            assert_relative_eq!(
+                actual.as_slice(),
+                expected.as_slice()
+            );
         }
     }
 }
