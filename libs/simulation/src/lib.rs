@@ -5,6 +5,7 @@ use std::f32::consts::FRAC_PI_2;
 
 pub mod world;
 mod eye;
+mod brain;
 mod individual;
 
 // CONSTANTS
@@ -91,7 +92,7 @@ impl Simulation {
                 );
 
             // get "decisions" from brain
-            let decisions = animal.brain
+            let decisions = animal.brain.neural_network
                 .propagate(vision);
 
             // decision #1: speed change

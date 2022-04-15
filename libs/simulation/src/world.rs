@@ -1,11 +1,12 @@
 use nalgebra as na;
 use rand::{Rng, RngCore};
-use lib_neural_network as nn;
+use lib_genetic_algorithm as ga;
 
 use super::eye;
+use super::brain;
 
 pub struct Animal {
-    pub(crate) brain: nn::Network,
+    pub(crate) brain: brain::Brain,
     pub(crate) eye: eye::Eye,
     pub(crate) food_consumed: usize,
     pub(crate) position: na::Point2<f32>,
@@ -14,29 +15,26 @@ pub struct Animal {
 }
 
 impl Animal {
+    pub fn new(
+        brain: brain::Brain,
+        eye: eye::Eye,
+        rng: &mut dyn RngCore
+    ) -> Self
+    {
+        Self {
+            brain,
+            eye,
+            food_consumed: 0,
+            position: rng.gen(), // na::Point2::new(rng.gen(), rng.gen())
+            rotation: rng.gen(), // na::Rotation2::new(rng.gen())
+            speed: 0.002,
+        }
+    }
+
     pub fn random(rng: &mut dyn RngCore) -> Self {
         let eye = eye::Eye::default();
 
-        let brain = nn::Network::randomize(
-            &[
-                // input layer
-                nn::LayerTopology {
-                    // one neuron each photoreceptor
-                    neurons: eye.photoreceptors()
-                },
-                // hidden layer(s)
-                nn::LayerTopology {
-                    // Trial #1: twice that of the input layer
-                    neurons: 2 * eye.photoreceptors()
-                },
-                // output layer
-                nn::LayerTopology {
-                    // two neurons: one for speed, other for rotation
-                    neurons: 2
-                }
-            ],
-            rng
-        );
+        let brain = brain::Brain::randomize(rng, &eye);
 
         Self {
             brain,
@@ -47,6 +45,11 @@ impl Animal {
             //TODO: slow down the simulation to a reasonable speed
             speed: 0.002
         }
+    }
+
+    pub fn as_chromosome(&self) -> ga::individual::Chromosome {
+        self.brain
+            .as_chromosome()
     }
 
     pub fn position(&self) -> na::Point2<f32> {
