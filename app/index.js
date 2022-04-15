@@ -60,6 +60,7 @@ CanvasRenderingContext2D.prototype.fillCircle = function (x, y, radius) {
 
 context.fillStyle = 'rgb(0, 0, 0)';
 
+//TODO: slow down the simulation to a reasonable speed
 const main = () => {
   context.clearRect(0, 0, viewportWidth * 1.1, viewportHeight * 1.1);
 

@@ -1,7 +1,12 @@
 use nalgebra as na;
 use rand::{Rng, RngCore};
+use lib_neural_network as nn;
+
+use super::eye;
 
 pub struct Animal {
+    pub(crate) brain: nn::Network,
+    pub(crate) eye: eye::Eye,
     pub(crate) position: na::Point2<f32>,
     pub(crate) rotation: na::Rotation2<f32>,
     pub(crate) speed: f32
@@ -9,9 +14,35 @@ pub struct Animal {
 
 impl Animal {
     pub fn random(rng: &mut dyn RngCore) -> Self {
+        let eye = eye::Eye::default();
+
+        let brain = nn::Network::randomize(
+            &[
+                // input layer
+                nn::LayerTopology {
+                    // one neuron each photoreceptor
+                    neurons: eye.photoreceptors()
+                },
+                // hidden layer(s)
+                nn::LayerTopology {
+                    // Trial #1: twice that of the input layer
+                    neurons: 2 * eye.photoreceptors()
+                },
+                // output layer
+                nn::LayerTopology {
+                    // two neurons: one for speed, other for rotation
+                    neurons: 2
+                }
+            ],
+            rng
+        );
+
         Self {
+            brain,
+            eye,
             position: rng.gen(), // na::Point2::new(rng.gen(), rng.gen())
             rotation: rng.gen(), // na::Rotation2::new(rng.gen())
+            //TODO: slow down the simulation to a reasonable speed
             speed: 0.002
         }
     }

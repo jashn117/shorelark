@@ -1,5 +1,12 @@
 use rand::{Rng, RngCore};
 use nalgebra as na;
+use std::f32::consts::FRAC_PI_2;
+
+// CONSTANTS
+const MIN_SPEED: f32 = 0.001;
+const MAX_SPEED: f32 = 0.005;
+const LIN_ACCELERATION: f32 = 0.2;
+const ROT_ACCELERATION: f32 = FRAC_PI_2;
 
 mod eye;
 pub mod world;
@@ -20,8 +27,9 @@ impl Simulation {
     }
 
     pub fn step(&mut self, rng: &mut dyn RngCore) {
+        self.handle_collision(rng);
+        self.handle_decisions();
         self.process_movement();
-        self.handle_collision(rng)
     }
 
     fn process_movement(&mut self) {
@@ -45,6 +53,48 @@ impl Simulation {
                     food.position = rng.gen()
                 }
             }
+        }
+    }
+
+    fn handle_decisions(&mut self) {
+        // for each animal
+        for animal in &mut self.world.animals {
+            // process vision
+            let vision = animal.eye
+                .process_vision(
+                    animal.position,
+                    animal.rotation,
+                    &self.world.food
+                );
+
+            // get "decisions" from brain
+            let decisions = animal.brain
+                .propagate(vision);
+
+            // decision #1: speed change
+            let delta_speed = decisions[0]
+                .clamp(
+                    -LIN_ACCELERATION,
+                    LIN_ACCELERATION
+                );
+
+            // decision #2: change in direction
+            let delta_theta = decisions[1]
+                .clamp(
+                    -ROT_ACCELERATION,
+                    ROT_ACCELERATION
+                );
+
+            // Apply the changes made from "decisions"
+            animal.speed = (animal.speed + delta_speed)
+                .clamp(
+                    MIN_SPEED,
+                    MAX_SPEED
+                );
+
+            animal.rotation = na::Rotation2::new(
+                animal.rotation.angle() + delta_theta
+            );
         }
     }
 }
