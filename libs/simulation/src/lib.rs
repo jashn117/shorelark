@@ -1,6 +1,7 @@
 use rand::{Rng, RngCore};
 use nalgebra as na;
 
+mod eye;
 pub mod world;
 
 pub struct Simulation {
