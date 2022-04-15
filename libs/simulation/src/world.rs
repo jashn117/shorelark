@@ -7,6 +7,7 @@ use super::eye;
 pub struct Animal {
     pub(crate) brain: nn::Network,
     pub(crate) eye: eye::Eye,
+    pub(crate) food_consumed: usize,
     pub(crate) position: na::Point2<f32>,
     pub(crate) rotation: na::Rotation2<f32>,
     pub(crate) speed: f32
@@ -40,6 +41,7 @@ impl Animal {
         Self {
             brain,
             eye,
+            food_consumed: 0,
             position: rng.gen(), // na::Point2::new(rng.gen(), rng.gen())
             rotation: rng.gen(), // na::Rotation2::new(rng.gen())
             //TODO: slow down the simulation to a reasonable speed

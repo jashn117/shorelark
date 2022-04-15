@@ -1,24 +1,39 @@
 use rand::{Rng, RngCore};
 use nalgebra as na;
+use lib_genetic_algorithm as ga;
 use std::f32::consts::FRAC_PI_2;
 
+pub mod world;
+mod eye;
+mod individual;
+
 // CONSTANTS
+const GENERATION_LENGTH: usize = 2500; // steps before evolving current generation
 const MIN_SPEED: f32 = 0.001;
 const MAX_SPEED: f32 = 0.005;
 const LIN_ACCELERATION: f32 = 0.2;
 const ROT_ACCELERATION: f32 = FRAC_PI_2;
 
-mod eye;
-pub mod world;
-
 pub struct Simulation {
     world: world::World,
+    genetic_algo: ga::GeneticAlgorithm<
+        ga::selection::RoulleteWheelSelection,
+        ga::crossover::UniformCrossover>,
+    age: usize
 }
 
 impl Simulation {
     pub fn random(rng: &mut dyn RngCore) -> Self {
         Self {
-            world: world::World::random(rng)
+            world: world::World::random(rng),
+            genetic_algo: ga::GeneticAlgorithm::new(
+                ga::selection::RoulleteWheelSelection::new(),
+                ga::crossover::UniformCrossover::new(),
+                // chance and coefficient chosen with trial and error
+                // higher values cause more chaos
+                ga::mutation::GaussianMutation::new(0.01, 0.3)
+            ),
+            age: 0
         }
     }
 
@@ -30,6 +45,12 @@ impl Simulation {
         self.handle_collision(rng);
         self.handle_decisions();
         self.process_movement();
+
+        self.age += 1;
+
+        if self.age > GENERATION_LENGTH {
+            self.evolve(rng);
+        }
     }
 
     fn process_movement(&mut self) {
@@ -50,6 +71,8 @@ impl Simulation {
                 );
 
                 if dist < 0.015 {
+                    // nom-nom-nom
+                    animal.food_consumed += 1;
                     food.position = rng.gen()
                 }
             }
@@ -95,6 +118,25 @@ impl Simulation {
             animal.rotation = na::Rotation2::new(
                 animal.rotation.angle() + delta_theta
             );
+        }
+    }
+
+    fn evolve(&mut self, rng: &mut dyn RngCore) {
+        self.age = 0;
+
+        // Prepare animals to be fed into the genetic algorithm
+        let current_population = todo!();
+
+        // Evolve the animals
+        let evolved_population = self.genetic_algo
+            .iterate(rng, current_population);
+
+        // Prepare the evolved population for the simulation
+        self.world.animals = todo!();
+
+        // Prepare the food
+        for food in &mut self.world.food {
+            food.position = rng.gen();
         }
     }
 }
