@@ -1,16 +1,15 @@
-use mutation::MutationMethod;
 // #![feature(type_alias_impl_trait)]
 use rand::RngCore;
 
-mod individual;
-mod selection;
-mod crossover;
-mod mutation;
+pub mod individual;
+pub mod selection;
+pub mod crossover;
+pub mod mutation;
 
 pub struct GeneticAlgorithm<S, C> {
     selection_method: S,
     crossover_method: C,
-    mutation_method: Box<dyn MutationMethod>
+    mutation_method: Box<dyn mutation::MutationMethod>
 }
 
 impl<S, C> GeneticAlgorithm<S, C>
@@ -21,7 +20,7 @@ where
     pub fn new(
         selection_method: S,
         crossover_method: C,
-        mutation_method: impl MutationMethod + 'static
+        mutation_method: impl mutation::MutationMethod + 'static
     ) -> Self {
         Self {
             selection_method,
