@@ -21,7 +21,19 @@ impl Brain {
                 .weights()
         }
     }
-    
+
+    pub fn from_chromosome(
+        chromosome: ga::individual::Chromosome,
+        eye: &eye::Eye
+    ) -> Self {
+        Self {
+            neural_network: nn::Network::from_weights(
+                &Self::topology(&eye),
+                chromosome
+            )
+        }
+    }
+
     pub fn topology(eye: &eye::Eye) -> [nn::LayerTopology; 3] {
         [
         // input layer

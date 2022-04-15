@@ -1,3 +1,4 @@
+use individual::AnimalIndividual;
 use rand::{Rng, RngCore};
 use nalgebra as na;
 use lib_genetic_algorithm as ga;
@@ -126,14 +127,20 @@ impl Simulation {
         self.age = 0;
 
         // Prepare animals to be fed into the genetic algorithm
-        let current_population = todo!();
+        let current_population: Vec<_> = self.world.animals
+            .iter()
+            .map(individual::AnimalIndividual::from_animal)
+            .collect();
 
         // Evolve the animals
         let evolved_population = self.genetic_algo
-            .iterate(rng, current_population);
+            .iterate(rng, &current_population);
 
         // Prepare the evolved population for the simulation
-        self.world.animals = todo!();
+        self.world.animals = evolved_population
+            .into_iter()
+            .map(|individual| individual.as_animal(rng))
+            .collect();
 
         // Prepare the food
         for food in &mut self.world.food {

@@ -47,6 +47,16 @@ impl Animal {
         }
     }
 
+    pub fn from_chromosome(
+        chromosome: ga::individual::Chromosome,
+        rng: &mut dyn RngCore
+    ) -> Self {
+        let eye = eye::Eye::default();
+        let brain = brain::Brain::from_chromosome(chromosome, &eye);
+
+        Self::new(brain, eye, rng)
+    }
+
     pub fn as_chromosome(&self) -> ga::individual::Chromosome {
         self.brain
             .as_chromosome()
