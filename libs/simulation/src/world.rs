@@ -43,7 +43,7 @@ impl Animal {
             position: rng.gen(), // na::Point2::new(rng.gen(), rng.gen())
             rotation: rng.gen(), // na::Rotation2::new(rng.gen())
             //TODO: slow down the simulation to a reasonable speed
-            speed: 0.002
+            speed: 0.001,
         }
     }
 

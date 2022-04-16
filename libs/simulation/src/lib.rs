@@ -1,7 +1,7 @@
 use rand::{Rng, RngCore};
 use nalgebra as na;
 use lib_genetic_algorithm as ga;
-use std::f32::consts::FRAC_PI_2;
+use std::f32::consts::FRAC_PI_8;
 
 pub mod world;
 mod eye;
@@ -10,9 +10,9 @@ mod individual;
 
 // CONSTANTS
 const MIN_SPEED: f32 = 0.001;
-const MAX_SPEED: f32 = 0.005;
-const LIN_ACCELERATION: f32 = 0.2;
-const ROT_ACCELERATION: f32 = FRAC_PI_2;
+const MAX_SPEED: f32 = 0.004;
+const LIN_ACCELERATION: f32 = 0.1;
+const ROT_ACCELERATION: f32 = FRAC_PI_8;
 
 pub struct Simulation {
     world: world::World,
