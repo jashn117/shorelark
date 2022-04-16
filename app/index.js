@@ -1,8 +1,4 @@
-import * as sim from 'lib-simulation-wasm';
-
-// create a new simulation
-const simulation = new sim.Simulation(2500, 10, 20);
-// generate and world and randomly populate it with animals and food
+import {createSimulation, runSimulation} from './simulation';
 
 // HTML Canvas setup
 const canvas = document
@@ -15,20 +11,20 @@ const scale = window.devicePixelRatio || 1;
 const viewportHeight = canvas.height;
 const viewportWidth =  canvas.width;
 
+//TODO: fix the canvas element's size/resolution
 //* Trick for a sharper canvas render
-// scale up canvas's buffer to match the screen's pixel ratio
+// scale up canvas's buffer to match the screen's pixel ratio || set the size of the canvas
 canvas.height = viewportHeight * scale;
 canvas.width = viewportWidth * scale;
-// scale down canvas's element
+// scale down canvas's element || sets the resolution
 canvas.style.height = viewportHeight + 'px';
 canvas.style.width = viewportWidth + 'px';
 //* #################################
 
-canvas.setAttribute('height', viewportHeight * scale)
-canvas.setAttribute('height', viewportHeight * scale)
-
+//* Method to draw the animal entity
 CanvasRenderingContext2D.prototype.fillTriangle = function (x, y, rotation, side) {
   this.beginPath();
+  this.lineWidth = 3;
   this.moveTo(
     x + Math.cos(rotation) * side * 1.5,
     y + Math.sin(rotation) * side * 1.5
@@ -46,10 +42,13 @@ CanvasRenderingContext2D.prototype.fillTriangle = function (x, y, rotation, side
     y + Math.sin(rotation) * side * 1.5
   );
 
-  this.fillStyle = 'rgb(232, 106, 146)';
-  this.fill();
+  this.strokeStyle = 'rgb(232, 106, 146)';
+  this.stroke();
+  // this.fillStyle = 'rgb(232, 106, 146)';
+  // this.fill();
 }
 
+//* Method to draw food entity 
 CanvasRenderingContext2D.prototype.fillCircle = function (x, y, radius) {
   this.beginPath();
   this.arc(x, y, radius, 0, 2 * Math.PI, false);
@@ -58,38 +57,6 @@ CanvasRenderingContext2D.prototype.fillCircle = function (x, y, radius) {
   this.fill();
 }
 
-context.fillStyle = 'rgb(0, 0, 0)';
-
-//TODO: slow down the simulation to a reasonable speed
-const main = () => {
-  context.clearRect(0, 0, viewportWidth * 1.1, viewportHeight * 1.1);
-
-  simulation.step();
-  const world = simulation.world();
-
-  // Render the food
-  for (const food of world.food) {
-    context
-      .fillCircle(
-        food.x * viewportWidth,
-        food.y * viewportHeight,
-        0.005 * viewportWidth
-      )
-  }
-
-  // Render the animals
-  for (const animal of world.animals) {
-    context
-      .fillTriangle(
-        animal.x * viewportWidth,
-        animal.y * viewportHeight,
-        animal.rotation,
-        0.02 * viewportWidth
-      );
-  }
-
-  window
-    .requestAnimationFrame(main);
-}
-
-main();
+// create the start the simulation
+const sim = createSimulation();
+runSimulation(sim, canvas, context);
