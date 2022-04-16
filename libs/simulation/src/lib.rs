@@ -1,4 +1,3 @@
-use individual::AnimalIndividual;
 use rand::{Rng, RngCore};
 use nalgebra as na;
 use lib_genetic_algorithm as ga;
@@ -10,7 +9,6 @@ mod brain;
 mod individual;
 
 // CONSTANTS
-const GENERATION_LENGTH: usize = 2500; // steps before evolving current generation
 const MIN_SPEED: f32 = 0.001;
 const MAX_SPEED: f32 = 0.005;
 const LIN_ACCELERATION: f32 = 0.2;
@@ -21,13 +19,19 @@ pub struct Simulation {
     genetic_algo: ga::GeneticAlgorithm<
         ga::selection::RoulleteWheelSelection,
         ga::crossover::UniformCrossover>,
-    age: usize
+    age: usize,
+    generation_length: usize,
 }
 
 impl Simulation {
-    pub fn random(rng: &mut dyn RngCore) -> Self {
+    pub fn random(
+        rng: &mut dyn RngCore,
+        generation_length: usize,
+        animals: usize,
+        foods: usize,
+    ) -> Self {
         Self {
-            world: world::World::random(rng),
+            world: world::World::random(rng, animals, foods),
             genetic_algo: ga::GeneticAlgorithm::new(
                 ga::selection::RoulleteWheelSelection::new(),
                 ga::crossover::UniformCrossover::new(),
@@ -35,7 +39,8 @@ impl Simulation {
                 // higher values cause more chaos
                 ga::mutation::GaussianMutation::new(0.01, 0.3)
             ),
-            age: 0
+            age: 0,
+            generation_length,
         }
     }
 
@@ -50,7 +55,7 @@ impl Simulation {
 
         self.age += 1;
 
-        if self.age > GENERATION_LENGTH {
+        if self.age > self.generation_length {
             self.evolve(rng);
         }
     }

@@ -98,12 +98,12 @@ pub struct World {
 
 impl World {
     //TODO: prevent entities in world from overlapping
-    pub fn random(rng: &mut dyn RngCore) -> Self {
-        let animals = (0..30)
+    pub fn random(rng: &mut dyn RngCore, animals: usize, foods: usize) -> Self {
+        let animals = (0..animals)
             .map(|_| Animal::random(rng))
             .collect();
         
-        let food = (0..50)
+        let food = (0..foods)
             .map(|_| Food::random(rng))
             .collect();
 

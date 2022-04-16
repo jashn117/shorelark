@@ -13,9 +13,19 @@ pub struct Simulation {
 #[wasm_bindgen]
 impl Simulation {
     #[wasm_bindgen(constructor)]
-    pub fn new() -> Self {
+    pub fn new(
+        generation_length: usize,
+        animals: usize,
+        foods: usize,
+    ) -> Self
+    {
         let mut rng = thread_rng();
-        let sim = sim::Simulation::random(&mut rng);
+        let sim = sim::Simulation::random(
+            &mut rng,
+            generation_length,
+            animals,
+            foods,
+        );
 
         Self { rng, sim }
     }

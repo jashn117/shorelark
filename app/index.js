@@ -1,7 +1,7 @@
 import * as sim from 'lib-simulation-wasm';
 
 // create a new simulation
-const simulation = new sim.Simulation();
+const simulation = new sim.Simulation(2500, 10, 20);
 // generate and world and randomly populate it with animals and food
 
 // HTML Canvas setup
