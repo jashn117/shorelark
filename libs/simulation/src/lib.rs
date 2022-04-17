@@ -10,8 +10,8 @@ mod individual;
 
 // CONSTANTS
 const MIN_SPEED: f32 = 0.001;
-const MAX_SPEED: f32 = 0.004;
-const LIN_ACCELERATION: f32 = 0.1;
+const MAX_SPEED: f32 = 0.005;
+const LIN_ACCELERATION: f32 = 0.2;
 const ROT_ACCELERATION: f32 = FRAC_PI_8;
 
 pub struct Simulation {
