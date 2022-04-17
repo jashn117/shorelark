@@ -27,44 +27,45 @@ export const createSimulation = () => {
 export const runSimulation = (simulation, canvas, context) => {
   //* Render the simulation and call the step method to progress through it
   //TODO: the main simulation loop
-  const viewportWidth = canvas.width;
-  const viewportHeight = canvas.height;
+  setTimeout(() => {
+    const viewportWidth = canvas.width;
+    const viewportHeight = canvas.height;
 
-  context
-    .clearRect(0, 0, viewportWidth * 1.1, viewportHeight * 1.1);
-
-  simulation
-    .step();
-  const world = simulation
-    .world();
-
-  // Render the food
-  for (const food of world.food) {
     context
-      .fillCircle(
-        food.x * viewportWidth,
-        food.y * viewportHeight,
-        0.005 * viewportWidth
-      )
-  }
+      .clearRect(0, 0, viewportWidth * 1.1, viewportHeight * 1.1);
 
-  // Render the animals
-  for (const animal of world.animals) {
-    context
-      .fillTriangle(
-        animal.x * viewportWidth,
-        animal.y * viewportHeight,
-        animal.rotation,
-        0.02 * viewportWidth
-      );
-  }
+    simulation
+      .step();
+    const world = simulation
+      .world();
 
-  window
-    .requestAnimationFrame(() => runSimulation(simulation, canvas, context));
+    // Render the food
+    for (const food of world.food) {
+      context
+        .drawFood(
+          food.x * viewportWidth,
+          food.y * viewportHeight,
+          0.005 * viewportWidth
+        )
+    }
+
+    // Render the animals
+    for (const animal of world.animals) {
+      context
+        .drawAnimal(
+          animal.x * viewportWidth,
+          animal.y * viewportHeight,
+          animal.rotation,
+          0.02 * viewportWidth
+        );
+    }
+
+    window
+      .requestAnimationFrame(() => runSimulation(simulation, canvas, context));
+  }, 1000 / 60);
 }
 
 const fastForwardGeneration = (simulation) => {
   //* fast forwards sim to the next generation
   //TODO: call the required method from the simulation lib
-  //TODO: slow down the simulation to a reasonable speed
 }

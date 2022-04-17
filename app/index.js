@@ -22,7 +22,7 @@ canvas.style.width = viewportWidth + 'px';
 //* #################################
 
 //* Method to draw the animal entity
-CanvasRenderingContext2D.prototype.fillTriangle = function (x, y, rotation, side) {
+CanvasRenderingContext2D.prototype.drawAnimal = function (x, y, rotation, side) {
   this.beginPath();
   this.lineWidth = 3;
   this.moveTo(
@@ -49,7 +49,7 @@ CanvasRenderingContext2D.prototype.fillTriangle = function (x, y, rotation, side
 }
 
 //* Method to draw food entity 
-CanvasRenderingContext2D.prototype.fillCircle = function (x, y, radius) {
+CanvasRenderingContext2D.prototype.drawFood = function (x, y, radius) {
   this.beginPath();
   this.arc(x, y, radius, 0, 2 * Math.PI, false);
 
