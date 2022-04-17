@@ -65,7 +65,9 @@ export const runSimulation = (simulation, canvas, context) => {
   }, 1000 / 60);
 }
 
-const fastForwardGeneration = (simulation) => {
+export const fastForwardGeneration = (simulation) => {
   //* fast forwards sim to the next generation
   //TODO: call the required method from the simulation lib
+    simulation
+      .fast_fwd();
 }

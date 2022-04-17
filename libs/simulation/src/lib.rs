@@ -60,6 +60,12 @@ impl Simulation {
         }
     }
 
+    pub fn fast_fwd_generation(&mut self, rng: &mut dyn RngCore) {
+        while self.age < self.generation_length {
+            self.step(rng);
+        }
+    }
+
     fn process_movement(&mut self) {
         for animal in &mut self.world.animals {
             animal.position += animal.rotation() * na::Vector2::new(animal.speed(), 0.0);

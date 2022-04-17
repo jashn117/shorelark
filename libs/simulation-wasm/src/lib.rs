@@ -38,6 +38,12 @@ impl Simulation {
     }
 
     pub fn step(&mut self) {
-        self.sim.step(&mut self.rng);
+        self.sim
+            .step(&mut self.rng);
+    }
+
+    pub fn fast_fwd(&mut self) {
+        self.sim
+            .fast_fwd_generation(&mut self.rng);
     }
 }

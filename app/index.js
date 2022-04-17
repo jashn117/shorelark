@@ -1,4 +1,4 @@
-import {createSimulation, runSimulation} from './simulation';
+import {createSimulation, runSimulation, fastForwardGeneration} from './simulation';
 
 // HTML Canvas setup
 const canvas = document
@@ -59,4 +59,9 @@ CanvasRenderingContext2D.prototype.drawFood = function (x, y, radius) {
 
 // create the start the simulation
 const sim = createSimulation();
+
+document
+  .getElementById('fast-fwd-btn')
+  .onclick = () => fastForwardGeneration(sim);
+
 runSimulation(sim, canvas, context);
