@@ -1,8 +1,24 @@
 import {createSimulation, runSimulation, fastForwardGeneration} from './simulation';
 
-// HTML Canvas setup
+// create the simulation viewport
 const canvas = document
-  .getElementById('viewport');
+  .createElement('canvas');
+canvas.id = 'viewport';
+canvas.height = 800;
+canvas.width = 800;
+
+const fastFwdBtn = document
+  .createElement('button');
+fastFwdBtn.type = 'button';
+fastFwdBtn.id = 'fast-fwd-btn';
+fastFwdBtn.innerHTML = '&#x23e9; Generation';
+
+document.body
+  .appendChild(canvas);
+
+document.body
+  .appendChild(fastFwdBtn);
+
 const context = canvas
   .getContext('2d');
 
