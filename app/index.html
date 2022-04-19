@@ -6,6 +6,23 @@
   </head>
   <body style="background: #2b2d42">
     <noscript>This page contains webassembly and javascript content, please enable javascript in your browser.</noscript>
+    <div id="sim-div">
+      <div id="world-inputs">
+        <label for="input-generation-length">
+          Generation Length
+          <input name="input-generation-length" id="input-generation-length" type="number" min="500" max="5000" value="2500">
+        </label>
+        <label for="input-animals">
+          Number of animals
+          <input name="input-animals" id="input-animals" type="number" min="10" max="50" value="20">
+        </label>
+        <label for="foods">
+          Food Availability
+          <input name="input-foods" id="input-foods" type="number" min="10" max="80" value="30">
+        </label>
+        <button type="button" id="start-sim-btn">Start Simulation</button>
+      </div>
+    </div>
     <!-- <button id="fast-fwd-btn" type="button">&#x23e9; Generation</button> -->
     <!-- <canvas id="viewport" height="800" width="800"></canvas> -->
     <script src="./bootstrap.js"></script>

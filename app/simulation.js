@@ -1,5 +1,49 @@
 import * as sim from 'lib-simulation-wasm';
 
+export const renderCanvasViewport = (width = 600, height = 600) => {
+  // create the simulation viewport
+  const canvas = document
+    .createElement('canvas');
+  canvas.id = 'viewport';
+  canvas
+    .setAttribute('height', 600);
+  canvas
+    .setAttribute('width', 600);
+
+  const fastFwdBtn = document
+    .createElement('button');
+    fastFwdBtn.type = 'button';
+    fastFwdBtn.id = 'fast-fwd-btn';
+    fastFwdBtn.innerHTML = '&#x23e9; Generation';
+
+  document.body
+    .appendChild(canvas);
+
+  document.body
+    .appendChild(fastFwdBtn);
+
+  const context = canvas
+    .getContext('2d');
+
+  const scale = window.devicePixelRatio || 1;
+
+  const viewportHeight = canvas.height;
+  const viewportWidth =  canvas.width;
+
+  //* Trick for a sharper canvas render
+  // scale up canvas's buffer to match the screen's pixel ratio || set the size of the canvas
+  canvas.height = viewportHeight * scale;
+  canvas.width = viewportWidth * scale;
+  // scale down canvas's element || sets the resolution
+  canvas.style.height = viewportHeight + 'px';
+  canvas.style.width = viewportWidth + 'px';
+
+  return {
+    canvas,
+    context
+  }
+}
+
 export const createSimulation = () => {
   //* create a new Simulation object
   //TODO: get sim properties(methods for genetic algorithm etc) from the form
@@ -9,12 +53,12 @@ export const createSimulation = () => {
   // let mutationMethod = document.getElementById();
   // sim generation length
   let generationLength = document
-    .getElementById('input-generation-length') || 2500;
+    .getElementById('input-generation-length').value || 2500;
   // no. of animals and foods
   let animals = document
-    .getElementById('input-animals') || 20;
+    .getElementById('input-animals').value || 20;
   let foods = document
-    .getElementById('input-foods') || 30;
+    .getElementById('input-foods').value || 30;
 
   // create a new instance of simulation
   const simulation = new sim
